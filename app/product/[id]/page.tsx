@@ -1,12 +1,17 @@
-"use client";
-
-import { useParams } from "next/navigation";
 import { products } from "@/data/products";
 import BuyBox from "./BuyBox";
 
-export default function ProductPage() {
-  const params = useParams<{ id: string }>();
-  const p = products.find((x) => x.id === params.id);
+export function generateStaticParams() {
+  return products.map((p) => ({ id: p.id }));
+}
+
+export default async function ProductPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+  const p = products.find((x) => x.id === id);
 
   if (!p) return <p className="p-6">Product nahi mila</p>;
 
